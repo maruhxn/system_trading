@@ -24,8 +24,6 @@ subprojects {
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
-    val mockitoAgent: Configuration by configurations.creating
-
     dependencyManagement {
         imports {
             mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudDependenciesVersion")}")
@@ -33,19 +31,13 @@ subprojects {
     }
 
     dependencies {
-        val implementation by configurations
-        val testImplementation by configurations
-        val testRuntimeOnly by configurations
-
         implementation("org.jetbrains.kotlin:kotlin-reflect")
-        implementation("org.springframework.boot:spring-boot-starter")
-
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+        annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+        testImplementation("org.springframework.boot:spring-boot-test")
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-        testImplementation("org.springframework.boot:spring-boot-starter-test")
-        testImplementation("com.ninja-squad:springmockk:5.0.1")
-        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-        mockitoAgent("org.mockito:mockito-core:5.11.0") { isTransitive = false }
+        testImplementation("org.assertj:assertj-core")
+        testImplementation("com.ninja-squad:springmockk:${property("springMockkVersion")}")
     }
 
     java {
@@ -68,12 +60,7 @@ subprojects {
         enabled = true
     }
 
-    tasks.withType<Test> {
+    tasks.test {
         useJUnitPlatform()
-        systemProperty("spring.profiles.active", "test")
-        jvmArgs(
-            "-javaagent:${mockitoAgent.asPath}",
-            "-Xshare:off" // CDS 기능 비활성화 ->  "OpenJDK 64-Bit Server VM warning: Sharing is only supported for ..." 에러 해결
-        )
     }
 }

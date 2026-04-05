@@ -7,7 +7,5 @@ import org.springframework.boot.test.context.SpringBootTest
 class SystemTradingApplicationTests {
 
     @Test
-    fun contextLoads() {
-    }
-
+    fun contextLoads() {}
 }

@@ -1,7 +1,7 @@
 package com.maruhxn.systemtrading.client.example
 
-import feign.RetryableException
 import com.maruhxn.systemtrading.client.ClientExampleContextTest
+import feign.RetryableException
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 
